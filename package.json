@@ -1,0 +1,57 @@
+{
+  "name": "@skeet-framework/api-plugin-solana-transfer",
+  "version": "0.1.0",
+  "description": "We research and develop software to realize a more comfortable society. We actively incorporate gamification to solve problems while having fun.",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elsoul/skeet-api-plugin-solana-transfer.git"
+  },
+  "keywords": [
+    "TypeScript",
+    "Serverless",
+    "Web3js"
+  ],
+  "author": "ELSOUL LABO B.V.",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/elsoul/skeet-api-plugin-solana-transfer/issues"
+  },
+  "homepage": "https://skeet.dev",
+  "scripts": {
+    "test": "jest --coverage=false --detectOpenHandles --maxWorkers=1",
+    "update:packages": "ncu -u && yarn",
+    "update:version": "ts-node -r tsconfig-paths/register release.ts",
+    "build": "yarn update:version && npx ts-node build.ts && npx ts-node add-line.ts",
+    "publish": "npm publish",
+    "dev": "nodemon",
+    "start": "node dist/index.js",
+    "skeet:hey": "yarn --cwd ./apps/workers/hey dev",
+    "skeet:solana-transfer": "yarn rm:solana-transfer-container && yarn run:solana-transfer",
+    "rm:solana-transfer-container": "docker rm -f skeet-worker-solana-transfer-dev",
+    "run:solana-transfer": "docker run -p 1112:1112 --name skeet-worker-solana-transfer-dev --env-file apps/api/.env eu.gcr.io/skeet-framework/skeet-worker-solana-transfer-dev:latest"
+  },
+  "dependencies": {
+    "dotenv": "16.0.3",
+    "jest": "29.4.3",
+    "node-fetch": "2.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "4.17.14",
+    "@types/jest": "29.2.5",
+    "@types/node": "18.11.9",
+    "@types/node-fetch": "2.6.2",
+    "babel-loader": "9.1.2",
+    "esbuild": "0.17.7",
+    "eslint": "8.27.0",
+    "eslint-config-prettier": "8.5.0",
+    "nodemon": "2.0.20",
+    "npm-check-updates": "16.4.1",
+    "prettier": "2.7.1",
+    "ts-jest": "29.0.5",
+    "ts-loader": "9.4.2",
+    "ts-node": "10.9.1",
+    "tsconfig-paths": "4.1.2",
+    "typescript": "4.9.3"
+  }
+}
