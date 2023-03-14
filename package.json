@@ -1,8 +1,8 @@
 {
   "name": "@skeet-framework/api-plugin-solana-transfer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "We research and develop software to realize a more comfortable society. We actively incorporate gamification to solve problems while having fun.",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/elsoul/skeet-api-plugin-solana-transfer.git"
@@ -26,11 +26,7 @@
     "build": "yarn update:version && npx ts-node build.ts && npx ts-node add-line.ts",
     "publish": "npm publish",
     "dev": "nodemon",
-    "start": "node dist/index.js",
-    "skeet:hey": "yarn --cwd ./apps/workers/hey dev",
-    "skeet:solana-transfer": "yarn rm:solana-transfer-container && yarn run:solana-transfer",
-    "rm:solana-transfer-container": "docker rm -f skeet-worker-solana-transfer-dev",
-    "run:solana-transfer": "docker run -p 1112:1112 --name skeet-worker-solana-transfer-dev --env-file apps/api/.env eu.gcr.io/skeet-framework/skeet-worker-solana-transfer-dev:latest"
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "dotenv": "16.0.3",
