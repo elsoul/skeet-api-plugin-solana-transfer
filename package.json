@@ -1,6 +1,6 @@
 {
   "name": "@skeet-framework/api-plugin-solana-transfer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "We research and develop software to realize a more comfortable society. We actively incorporate gamification to solve problems while having fun.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

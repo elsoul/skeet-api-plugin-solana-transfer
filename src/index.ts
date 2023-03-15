@@ -9,7 +9,7 @@ const SOLANA_TRANSFER_WORKER_URL = process.env.SOLANA_TRANSFER_WORKER_URL || ''
 const ENDPOINT = '/run'
 
 dotenv.config()
-export type SolanaSplTransferParam = {
+export type SkeetSplTransferParam = {
   toAddressPubkey: string
   transferAmountLamport: number
   tokenMintAddress: string
@@ -20,7 +20,7 @@ export type SolanaSplTransferParam = {
   returnQueryName?: string
 }
 
-export type SolanaSolTransferParam = {
+export type SkeetSolTransferParam = {
   toAddressPubkey: string
   transferAmountLamport: number
   encodedFromSecretKeyString: string
@@ -36,7 +36,7 @@ export const SOLANA_TOKEN_MINT_ADDRESS =
 export const DEFAULT_RETURN_MUTATION_NAME = 'solanaTransferReturn'
 
 export const skeetSplTransfer = async (
-  solanaSplTransferParam: SolanaSplTransferParam
+  solanaSplTransferParam: SkeetSplTransferParam
 ) => {
   try {
     if (!solanaSplTransferParam.returnQueryName) {
@@ -61,7 +61,7 @@ export const skeetSplTransfer = async (
 }
 
 export const skeetSolTransfer = async (
-  solanaSolTransferParam: SolanaSolTransferParam
+  solanaSolTransferParam: SkeetSolTransferParam
 ) => {
   try {
     if (process.env.NODE_ENV === 'production') {
@@ -69,7 +69,7 @@ export const skeetSolTransfer = async (
         tokenMintAddress: SOLANA_TOKEN_MINT_ADDRESS,
         decimal: 8,
       }
-      const transferBody: SolanaSplTransferParam = Object.assign(
+      const transferBody: SkeetSplTransferParam = Object.assign(
         {},
         solanaSolTransferParam,
         solBody
@@ -91,7 +91,7 @@ export const skeetSolTransfer = async (
   }
 }
 
-const encodeBase64 = async (payload: SolanaSplTransferParam) => {
+const encodeBase64 = async (payload: SkeetSplTransferParam) => {
   const json = JSON.stringify(payload)
   return Buffer.from(json).toString('base64')
 }
