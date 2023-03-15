@@ -1,6 +1,14 @@
-import createCloudTask from '@/lib/createCloudTask'
-import { sendPost } from '@/lib/http'
+import { v2 } from '@google-cloud/tasks'
+import dotenv from 'dotenv'
+import fetch from 'node-fetch'
 
+const { CloudTasksClient } = v2
+const project = process.env.SKEET_GCP_PROJECT || 'skeet-framework'
+const location = process.env.SKEET_GCP_TASK_REGION || 'europe-west1'
+const SOLANA_TRANSFER_WORKER_URL = process.env.SOLANA_TRANSFER_WORKER_URL || ''
+const ENDPOINT = '/run'
+
+dotenv.config()
 export type SolanaSplTransferParam = {
   toAddressPubkey: string
   transferAmountLamport: number
@@ -51,6 +59,7 @@ export const skeetSplTransfer = async (
     throw new Error(errorLog)
   }
 }
+
 export const skeetSolTransfer = async (
   solanaSolTransferParam: SolanaSolTransferParam
 ) => {
@@ -85,4 +94,50 @@ export const skeetSolTransfer = async (
 const encodeBase64 = async (payload: SolanaSplTransferParam) => {
   const json = JSON.stringify(payload)
   return Buffer.from(json).toString('base64')
+}
+
+const createCloudTask = async (
+  queue: string = SOLANA_TRANSFER_QUEUE,
+  body: string
+) => {
+  const client = new CloudTasksClient()
+  async function createTask() {
+    const url = SOLANA_TRANSFER_WORKER_URL + ENDPOINT
+    const parent = client.queuePath(project, location, queue)
+    const task = {
+      httpRequest: {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        httpMethod: 'POST',
+        url,
+        body,
+      },
+    }
+
+    console.log(`Sending task: ${queue}`)
+
+    // Send create task request.
+    const request = { parent: parent, task: task }
+    //@ts-ignore
+    const [response] = await client.createTask(request)
+    const name = response.name
+    console.log(`Created task ${name}`)
+  }
+
+  createTask()
+}
+
+const sendPost = async (url: string, body: string) => {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body,
+      headers: { 'Content-Type': 'application/json' },
+    })
+    return response
+  } catch (e) {
+    console.log({ e })
+    throw new Error(`Skeet Plugin - sendPost: ${e}`)
+  }
 }
