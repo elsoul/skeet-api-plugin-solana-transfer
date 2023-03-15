@@ -1,27 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "outDir": "./dist",
-    "rootDir": ".",
+    "target": "es2018",
+    "module": "commonjs",
+    "declaration": true,
     "strict": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
+    "allowSyntheticDefaultImports": false,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "lib": ["esnext"],
-    "sourceMap": true,
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "forceConsistentCasingInFileNames": true
   },
-  "files": ["package.json"],
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"],
-  "compileOnSave": false
+  "include": ["./src/**/*"],
+  "exclude": ["./test/**/*"]
 }

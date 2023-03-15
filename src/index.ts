@@ -1,5 +1,5 @@
 import { v2 } from '@google-cloud/tasks'
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 import fetch from 'node-fetch'
 
 const { CloudTasksClient } = v2

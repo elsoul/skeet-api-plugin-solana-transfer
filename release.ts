@@ -1,4 +1,4 @@
-import pjson from './package.json'
+import * as pjson from './package.json'
 import * as fsPromise from 'fs/promises'
 
 console.log(`updated version to ${pjson.version}`)
