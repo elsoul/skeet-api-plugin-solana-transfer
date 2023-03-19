@@ -20,6 +20,96 @@
   </a>
 </p>
 
+# Skeet API Plugin - Solana Transfer
+
+## Install
+
+### Add Skeet Worker Plugin
+
+```bash
+$ skeet add workerPlugin
+? Select Services to deploy (Use arrow keys)
+   = Plugins =
+❯ solana-transfer
+  orca-swap
+  jupiter-swap
+```
+
+Select `solana-transfer`
+
+### Add Plugin
+
+```bash
+$ skeet add yarn -p @skeet-framework/api-plugin-solana-transfer
+```
+
+## Usage
+
+### Send Sol
+
+```javascript
+import { genKeypair, getKeypairData } from '@/lib/solanaUtils'
+import {
+  skeetSolTransfer,
+  SkeetSolTransferParam,
+} from '@skeet-framework/api-plugin-solana-transfer'
+
+const queueId = 1 // optional
+const fromKeypair = await genKeypair()
+const toKeypair = await genKeypair()
+const keypairData = await getKeypairData(fromKeypair)
+const iv = await generateIv() // decrypt key for worker
+const encodedFromSecretKeyString = await decrypt(
+  keypairData.unit8Array.join(','),
+  iv
+)
+
+const skeetSolTransferParam: SkeetSolTransferParam = {
+  id: queueId,
+  toAddressPubkey: toKeypair.pubkey.toBase58(),
+  transferAmountLamport: 1000,
+  encodedFromSecretKeyString,
+  iv: iv.toString('base64'),
+  rpcUrl: 'https://api.devnet.solana.com/',
+}
+await skeetSolTransfer(skeetSolTransferParam)
+```
+
+### Send SPL Token
+
+```javascript
+import { genKeypair, getKeypairData } from '@/lib/solanaUtils'
+import {
+  skeetSplTransfer,
+  SkeetSplTransferParam,
+} from '@skeet-framework/api-plugin-solana-transfer'
+
+const queueId = 1 // optional
+// e.g. $EPCT - https://solscan.io/token/CvB1ztJvpYQPvdPBePtRzjL4aQidjydtUz61NWgcgQtP
+const TOKEN_MINT_ADDRESS = 'CvB1ztJvpYQPvdPBePtRzjL4aQidjydtUz61NWgcgQtP'
+const decimal = 6 // TOKEN_MINT_ADDRESS's decimal
+const fromKeypair = await genKeypair()
+const toKeypair = await genKeypair()
+const keypairData = await getKeypairData(fromKeypair)
+const iv = await generateIv() // decrypt key for worker
+const encodedFromSecretKeyString = await decrypt(
+  keypairData.unit8Array.join(','),
+  iv
+)
+
+const skeetSplTransferParam: SkeetSplTransferParam = {
+  id: queueId,
+  toAddressPubkey: toKeypair.pubkey.toBase58(),
+  tokenMintAddress: TOKEN_MINT_ADDRESS,
+  transferAmountLamport: 1000,
+  encodedFromSecretKeyString,
+  iv: iv.toString('base64'),
+  rpcUrl: 'https://api.devnet.solana.com/',
+  decimal,
+}
+await skeetSplTransfer(skeetSolTransferParam)
+```
+
 ## Skeet TypeScript Serverless Framework
 
 Nexus Prisma, GraphQL, Relay Connection, ApolloServer with Express, TypeScript, PostgreSQL, Jest Test, Google Cloud Run
@@ -43,51 +133,7 @@ Powered by TypeScript GraphQL, Prisma, Jest, Prettier, and Google Cloud.
 - [GitHub CLI](https://cli.github.com/)
 - [Git Crypt](https://github.com/AGWA/git-crypt)
 
-## Usage
-
-## Install skeet
-
-```bash
-$ npm i -g skeet
-```
-
-## Create Skeet API
-
-```bash
-$ skeet create ${appName}
-```
-
 ![Skeet Create](https://storage.googleapis.com/skeet-assets/animation/skeet-create-compressed.gif)
-
-## Run local
-
-```bash
-$ skeet s
-```
-
-Now you can access;
-
-`http://localhost:4000/graphql`
-
-## Zero to Deploy
-
-### Git Init
-
-```bash
-$ skeet init
-```
-
-### Document
-
-- [Skeet Document](https://skeet.dev)
-
-### Deploy All Services to Google Cloud Run
-
-```bash
-$ skeet deploy
-```
-
-![Skeet Deploy](https://storage.googleapis.com/skeet-assets/animation/skeet-deploy-compressed.gif)
 
 ## Contributing
 

@@ -10,6 +10,7 @@ const ENDPOINT = '/run'
 
 dotenv.config()
 export type SkeetSplTransferParam = {
+  id?: number
   toAddressPubkey: string
   transferAmountLamport: number
   tokenMintAddress: string
@@ -17,31 +18,27 @@ export type SkeetSplTransferParam = {
   iv: string
   rpcUrl: string
   decimal: number
-  returnQueryName?: string
 }
 
 export type SkeetSolTransferParam = {
+  id?: number
   toAddressPubkey: string
   transferAmountLamport: number
   encodedFromSecretKeyString: string
   iv: string
   rpcUrl: string
-  returnQueryName?: string
 }
 
 export const SOLANA_TRANSFER_QUEUE = 'skeet-solana-token-transfer'
 export const SOLANA_TRANSFER_WORKER_DEV_URL = 'http://localhost:1112/run'
 export const SOLANA_TOKEN_MINT_ADDRESS =
   'So11111111111111111111111111111111111111112'
-export const DEFAULT_RETURN_MUTATION_NAME = 'solanaTransferReturn'
+export const DEFAULT_RETURN_MUTATION_NAME = 'saveSkeetSolanaTransfer'
 
 export const skeetSplTransfer = async (
   solanaSplTransferParam: SkeetSplTransferParam
 ) => {
   try {
-    if (!solanaSplTransferParam.returnQueryName) {
-      solanaSplTransferParam.returnQueryName = DEFAULT_RETURN_MUTATION_NAME
-    }
     if (process.env.NODE_ENV === 'production') {
       const payload = await encodeBase64(solanaSplTransferParam)
       await createCloudTask(SOLANA_TRANSFER_QUEUE, payload)

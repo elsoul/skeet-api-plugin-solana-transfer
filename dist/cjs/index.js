@@ -39,12 +39,9 @@ dotenv.config();
 exports.SOLANA_TRANSFER_QUEUE = 'skeet-solana-token-transfer';
 exports.SOLANA_TRANSFER_WORKER_DEV_URL = 'http://localhost:1112/run';
 exports.SOLANA_TOKEN_MINT_ADDRESS = 'So11111111111111111111111111111111111111112';
-exports.DEFAULT_RETURN_MUTATION_NAME = 'solanaTransferReturn';
+exports.DEFAULT_RETURN_MUTATION_NAME = 'saveSkeetSolanaTransfer';
 const skeetSplTransfer = async (solanaSplTransferParam) => {
     try {
-        if (!solanaSplTransferParam.returnQueryName) {
-            solanaSplTransferParam.returnQueryName = exports.DEFAULT_RETURN_MUTATION_NAME;
-        }
         if (process.env.NODE_ENV === 'production') {
             const payload = await encodeBase64(solanaSplTransferParam);
             await createCloudTask(exports.SOLANA_TRANSFER_QUEUE, payload);
