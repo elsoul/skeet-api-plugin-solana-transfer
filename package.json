@@ -1,7 +1,7 @@
 {
   "name": "@skeet-framework/api-plugin-solana-transfer",
-  "version": "0.2.4",
-  "description": "Skeet Worker Plugin - Solana Transfer",
+  "version": "0.2.5",
+  "description": "Skeet API Plugin - Solana Transfer",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

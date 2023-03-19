@@ -23,6 +23,15 @@
 
 # Skeet API Plugin - Solana Transfer
 
+The Skeet Worker Solana Transfer plugin consists of two primary functions:
+
+- `skeetSolTransfer`
+
+- `skeetSplTransfer`
+
+Skeet Solana Transfer container will be automatically deployed on Google Cloud by Skeet CLI.
+Skeet API executes Google Cloud Tasks to run Skeet Worker.
+
 ## Install
 
 ### Add Skeet Worker Plugin
@@ -49,6 +58,7 @@ $ skeet add yarn -p @skeet-framework/api-plugin-solana-transfer
 ### Send Sol
 
 ```javascript
+import { generateIv } from '@/lib/crypto'
 import { genKeypair, getKeypairData } from '@/lib/solanaUtils'
 import {
   skeetSolTransfer,
@@ -60,25 +70,31 @@ const fromKeypair = await genKeypair()
 const toKeypair = await genKeypair()
 const keypairData = await getKeypairData(fromKeypair)
 const iv = await generateIv() // decrypt key for worker
+const rpcUrl = 'https://api.devnet.solana.com/'
 const encodedFromSecretKeyString = await decrypt(
   keypairData.unit8Array.join(','),
   iv
 )
 
-const skeetSolTransferParam: SkeetSolTransferParam = {
-  id: queueId,
-  toAddressPubkey: toKeypair.pubkey.toBase58(),
-  transferAmountLamport: 1000,
-  encodedFromSecretKeyString,
-  iv: iv.toString('base64'),
-  rpcUrl: 'https://api.devnet.solana.com/',
+const transferSol = async () => {
+  const skeetSolTransferParam: SkeetSolTransferParam = {
+    id: queueId,
+    toAddressPubkey: toKeypair.pubkey.toBase58(),
+    transferAmountLamport: 1000,
+    encodedFromSecretKeyString,
+    iv: iv.toString('base64'),
+    rpcUrl,
+  }
+  await skeetSolTransfer(skeetSolTransferParam)
 }
-await skeetSolTransfer(skeetSolTransferParam)
+
+transferSol()
 ```
 
 ### Send SPL Token
 
 ```javascript
+import { generateIv } from '@/lib/crypto'
 import { genKeypair, getKeypairData } from '@/lib/solanaUtils'
 import {
   skeetSplTransfer,
@@ -93,22 +109,25 @@ const fromKeypair = await genKeypair()
 const toKeypair = await genKeypair()
 const keypairData = await getKeypairData(fromKeypair)
 const iv = await generateIv() // decrypt key for worker
+const rpcUrl = 'https://api.mainnet-beta.solana.com/'
 const encodedFromSecretKeyString = await decrypt(
   keypairData.unit8Array.join(','),
   iv
 )
-
-const skeetSplTransferParam: SkeetSplTransferParam = {
-  id: queueId,
-  toAddressPubkey: toKeypair.pubkey.toBase58(),
-  tokenMintAddress: TOKEN_MINT_ADDRESS,
-  transferAmountLamport: 1000,
-  encodedFromSecretKeyString,
-  iv: iv.toString('base64'),
-  rpcUrl: 'https://api.devnet.solana.com/',
-  decimal,
+const transferSpl = async () => {
+  const skeetSplTransferParam: SkeetSplTransferParam = {
+    id: queueId,
+    toAddressPubkey: toKeypair.pubkey.toBase58(),
+    tokenMintAddress: TOKEN_MINT_ADDRESS,
+    transferAmountLamport: 1000,
+    encodedFromSecretKeyString,
+    iv: iv.toString('base64'),
+    rpcUrl,
+    decimal,
+  }
+  await skeetSplTransfer(skeetSolTransferParam)
 }
-await skeetSplTransfer(skeetSolTransferParam)
+transferSpl()
 ```
 
 ## Skeet Document

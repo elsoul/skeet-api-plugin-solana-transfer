@@ -20,7 +20,7 @@ export const skeetSplTransfer = async (solanaSplTransferParam) => {
         else {
             const res = await sendPost(SOLANA_TRANSFER_WORKER_DEV_URL, JSON.stringify(solanaSplTransferParam));
             const result = await res.json();
-            console.log(`API POST result: ${result.status}`);
+            console.log(`Solana Transfer POST result: ${result.status}`);
         }
     }
     catch (error) {
@@ -43,7 +43,7 @@ export const skeetSolTransfer = async (solanaSolTransferParam) => {
         else {
             const res = await sendPost(SOLANA_TRANSFER_WORKER_DEV_URL, JSON.stringify(solanaSolTransferParam));
             const result = await res.json();
-            console.log(`API POST result: ${result.status}`);
+            console.log(`Solana Transfer POST result: ${result.status}`);
         }
     }
     catch (error) {
