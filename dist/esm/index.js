@@ -2,9 +2,6 @@ import { v2 } from '@google-cloud/tasks';
 import * as dotenv from 'dotenv';
 import fetch from 'node-fetch';
 const { CloudTasksClient } = v2;
-const project = process.env.SKEET_GCP_PROJECT || 'skeet-framework';
-const location = process.env.SKEET_GCP_TASK_REGION || 'europe-west1';
-const SOLANA_TRANSFER_WORKER_URL = process.env.SOLANA_TRANSFER_WORKER_URL || '';
 const ENDPOINT = '/run';
 dotenv.config();
 export const SOLANA_TRANSFER_QUEUE = 'skeet-solana-token-transfer';
@@ -15,7 +12,7 @@ export const skeetSplTransfer = async (solanaSplTransferParam) => {
     try {
         if (process.env.NODE_ENV === 'production') {
             const payload = await encodeBase64(solanaSplTransferParam);
-            await createCloudTask(SOLANA_TRANSFER_QUEUE, payload);
+            await createCloudTask(solanaSplTransferParam.workerUrl, solanaSplTransferParam.projectId, solanaSplTransferParam.taskLocation, SOLANA_TRANSFER_QUEUE, payload);
         }
         else {
             const res = await sendPost(SOLANA_TRANSFER_WORKER_DEV_URL, JSON.stringify(solanaSplTransferParam));
@@ -38,7 +35,7 @@ export const skeetSolTransfer = async (solanaSolTransferParam) => {
             };
             const transferBody = Object.assign({}, solanaSolTransferParam, solBody);
             const payload = await encodeBase64(transferBody);
-            await createCloudTask(SOLANA_TRANSFER_QUEUE, payload);
+            await createCloudTask(solanaSolTransferParam.workerUrl, solanaSolTransferParam.projectId, solanaSolTransferParam.taskLocation, SOLANA_TRANSFER_QUEUE, payload);
         }
         else {
             const res = await sendPost(SOLANA_TRANSFER_WORKER_DEV_URL, JSON.stringify(solanaSolTransferParam));
@@ -56,11 +53,11 @@ const encodeBase64 = async (payload) => {
     const json = JSON.stringify(payload);
     return Buffer.from(json).toString('base64');
 };
-const createCloudTask = async (queue = SOLANA_TRANSFER_QUEUE, body) => {
+const createCloudTask = async (workerUrl, projectId, taskLocation, queue = SOLANA_TRANSFER_QUEUE, body) => {
     const client = new CloudTasksClient();
     async function createTask() {
-        const url = SOLANA_TRANSFER_WORKER_URL + ENDPOINT;
-        const parent = client.queuePath(project, location, queue);
+        const url = workerUrl + ENDPOINT;
+        const parent = client.queuePath(projectId, taskLocation, queue);
         const task = {
             httpRequest: {
                 headers: {

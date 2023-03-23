@@ -1,5 +1,8 @@
 export type SkeetSplTransferParam = {
     id?: number;
+    projectId: string;
+    taskLocation: string;
+    workerUrl: string;
     toAddressPubkey: string;
     transferAmountLamport: number;
     tokenMintAddress: string;
@@ -10,6 +13,9 @@ export type SkeetSplTransferParam = {
 };
 export type SkeetSolTransferParam = {
     id?: number;
+    projectId: string;
+    taskLocation: string;
+    workerUrl: string;
     toAddressPubkey: string;
     transferAmountLamport: number;
     encodedFromSecretKeyString: string;
