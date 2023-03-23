@@ -61,7 +61,7 @@ const skeetSolTransfer = async (solanaSolTransferParam) => {
         if (process.env.NODE_ENV === 'production') {
             const solBody = {
                 tokenMintAddress: exports.SOLANA_TOKEN_MINT_ADDRESS,
-                decimal: 8,
+                decimal: 9,
             };
             const transferBody = Object.assign({}, solanaSolTransferParam, solBody);
             const payload = await encodeBase64(transferBody);

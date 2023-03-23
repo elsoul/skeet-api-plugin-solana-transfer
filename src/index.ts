@@ -73,7 +73,7 @@ export const skeetSolTransfer = async (
     if (process.env.NODE_ENV === 'production') {
       const solBody = {
         tokenMintAddress: SOLANA_TOKEN_MINT_ADDRESS,
-        decimal: 8,
+        decimal: 9,
       }
       const transferBody: SkeetSplTransferParam = Object.assign(
         {},
